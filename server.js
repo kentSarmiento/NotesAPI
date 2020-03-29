@@ -72,4 +72,15 @@ app.get("/notes", (req, res) => {
     });
 });
 
+app.delete("/notes/:id", (req, res) => {
+  console.log('Received delete request for ' + req.params.id);
+
+  Note.deleteOne({_id: req.params.id})
+    .then(result => {
+      console.log('... deleted!!!');
+    });
+
+  res.status(200).end();
+});
+
 app.listen(3000);
