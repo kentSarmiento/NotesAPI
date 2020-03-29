@@ -57,10 +57,10 @@ app.post("/notes", (req, res) => {
    */
   const note = new Note( req.body );
 
-  notes.push(note);   // Push to database
-  note.save();        // Save to local "cache"
-
-  res.status(201).send(note);
+  notes.push(note);
+  note.save().then(result => {
+    res.status(201).send(result);
+  });
 });
 
 app.get("/notes", (req, res) => {
@@ -78,9 +78,8 @@ app.delete("/notes/:id", (req, res) => {
   Note.deleteOne({_id: req.params.id})
     .then(result => {
       console.log('... deleted!!!');
+      res.status(200).end();
     });
-
-  res.status(200).end();
 });
 
 app.listen(3000);
