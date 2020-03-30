@@ -72,12 +72,28 @@ app.get("/notes", (req, res) => {
     });
 });
 
+app.put("/notes/:id", (req, res) => {
+  console.log("Received put request for " + req.params.id);
+
+  const note = new Note({
+    _id: req.params.id,
+    title: req.body.title,
+    content: req.body.content,
+    category: req.body.category,
+    author: req.body.author,
+    });
+
+  Note.updateOne({_id: req.params.id}, note)
+    .then(documents => {
+      res.status(200).send(documents);
+    });
+});
+
 app.delete("/notes/:id", (req, res) => {
   console.log('Received delete request for ' + req.params.id);
 
   Note.deleteOne({_id: req.params.id})
     .then(result => {
-      console.log('... deleted!!!');
       res.status(200).end();
     });
 });
