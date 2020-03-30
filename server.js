@@ -46,4 +46,4 @@ app.use("/notes", notesRoutes);
 app.use("/users", userRoutes);
 app.use("/users", userNoteRoutes);
 
-app.listen(3000);
+app.listen(process.env.PORT || 8080);
