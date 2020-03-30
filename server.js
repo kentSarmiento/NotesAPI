@@ -72,6 +72,19 @@ app.get("/notes", (req, res) => {
     });
 });
 
+app.get("/notes/:id", (req, res) => {
+  console.log("Received get request...");
+
+  Note.findOne({_id: req.params.id})
+    .then(note => {
+      if (note) {
+        res.status(200).send(note);
+      } else {
+        res.status(404).json({message: 'Note not found!'});
+      }
+    });
+});
+
 app.put("/notes/:id", (req, res) => {
   console.log("Received put request for " + req.params.id);
 
