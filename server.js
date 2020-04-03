@@ -1,9 +1,19 @@
 const express = require('express');
 const bodyParser = require("body-parser");
+const mongoose = require('mongoose');
+
+const notesRoutes = require('./routes/notes');
 
 const app = express();
 
-var notes = [];
+/* Connect to database */
+mongoose.connect("mongodb+srv://manager:XDeU8k0xSsInSY3f@clusterfree-g7tel.mongodb.net/notes-app?retryWrites=true&w=majority")
+  .then(() => {
+    console.log("Connected to database!");
+  })
+  .catch(() => {
+    console.log("Connection to database failed!");
+  });
 
 app.use(bodyParser.json());
 
@@ -27,22 +37,9 @@ app.use((req, res, next) => {
     res.setHeader(headers[i]['name'], headers[i]['value']);
   }
 
-  next();
+  next(); // Trigger other middlewares
 });
 
-app.get("/", (req, res) => {
-  res.status(200).send('Hello World!')
-});
-
-app.post("/notes", (req, res) => {
-  const note = req.body;
-  notes.push(note);
-
-  res.status(201).send(note);
-});
-
-app.get("/notes", (req, res) => {
-  res.status(200).send(notes);
-});
+app.use("/notes", notesRoutes);
 
 app.listen(3000);
