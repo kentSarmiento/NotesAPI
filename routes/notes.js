@@ -8,17 +8,6 @@ var notes = [];
 router.post("", (req, res) => {
   console.log("Received post request...");
 
-  /*
-   * Method 1: mapping
-  const note = new Note({
-    title: req.body.title,
-    content: req.body.content,
-    author: req.body.author,
-    category: req.body.category,
-  });
-   *
-   * Method 2: direct
-   */
   const note = new Note( req.body );
 
   notes.push(note);
@@ -30,9 +19,27 @@ router.post("", (req, res) => {
 router.get("", (req, res) => {
   console.log("Received get request...");
 
-  Note.find()
-    .then(documents => {
-      res.status(200).send(documents);
+  const limit = +req.query.limit;
+  const page = +req.query.page;
+  const query = Note.find();
+
+  let queryResult;
+
+  if (limit && page) {
+    query.skip(limit * (page - 1))
+      .limit(limit);
+  }
+
+  query
+    .then(result => {
+      queryResult = result;
+      return Note.count();
+    })
+    .then(count => {
+      res.status(200).json({
+        notes: queryResult,
+        total: count
+      });
     });
 });
 
