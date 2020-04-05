@@ -1,8 +1,9 @@
 const express = require('express');
-const bodyParser = require("body-parser");
+const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
 const notesRoutes = require('./routes/notes');
+const userRoutes = require('./routes/users');
 
 const app = express();
 
@@ -25,7 +26,7 @@ app.use((req, res, next) => {
     },
     {
       "name": "Access-Control-Allow-Headers",
-      "value": "Origin, X-Requested-With, Content-Type, Accept"
+      "value": "Origin, X-Requested-With, Content-Type, Accept, Authorization"
     },
     {
       "name": "Access-Control-Allow-Methods",
@@ -41,5 +42,6 @@ app.use((req, res, next) => {
 });
 
 app.use("/notes", notesRoutes);
+app.use("/users", userRoutes);
 
 app.listen(3000);
