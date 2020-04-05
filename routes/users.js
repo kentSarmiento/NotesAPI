@@ -1,5 +1,6 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 const User = require('../models/user');
 
@@ -47,8 +48,15 @@ router.post("/login", (req, res, next) => {
           message: "Authentication failed! Incorrect password"
         });
       }
+      const token = jwt.sign(
+        { username: foundUser.username, userId: foundUser._id },
+        "secret_token",
+        { expiresIn: "24h" }
+      );
       res.status(200).json({
-        message: "Authentication success!"
+        token: token,
+        expiresIn: (60 * 60 *24),
+        userId: foundUser._id
       });
     });
 });
