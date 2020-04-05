@@ -28,4 +28,29 @@ router.post("/signup", (req, res, next) => {
   });
 });
 
+router.post("/login", (req, res, next) => {
+  console.log("Received new login request...");
+
+  User.findOne({ username: req.body.username })
+    .then(user => {
+      if (!user) { // TODO: returning here will "attempt" to send 200 OK after promise
+        return res.status(401).json({
+          message: "Authentication failed! Username not found"
+        });
+      }
+      foundUser = user;
+      return bcrypt.compare(req.body.password, user.password);
+    })
+    .then(result => {
+      if (!result) {
+        return res.status(401).json({
+          message: "Authentication failed! Incorrect password"
+        });
+      }
+      res.status(200).json({
+        message: "Authentication success!"
+      });
+    });
+});
+
 module.exports = router;
