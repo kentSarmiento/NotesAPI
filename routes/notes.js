@@ -12,6 +12,7 @@ router.post("",
   const note = new Note({
     title: req.body.title,
     content: req.body.content,
+    personal: req.body.personal || false,
     creator: req.authInfo.userId
   });
 
@@ -20,12 +21,27 @@ router.post("",
   });
 });
 
-router.get("", (req, res) => {
+router.get("",
+  AuthMiddleware,
+  (req, res) => {
   console.log("Received get request...");
 
   const limit = +req.query.limit;
   const page = +req.query.page;
-  const query = Note.find();
+
+  // Provide public notes in general
+  let criteria = { personal: { $ne: true } };
+  if (req.authInfo && req.authInfo.userId) {
+      // If authorized, include private notes of user
+      criteria = { $or: [
+                  { $and: [
+                    { personal: true },
+                    { creator: req.authInfo.userId }
+                    ] },
+                  { personal: { $ne: true } }
+                  ] };
+  }
+  const query = Note.find( criteria );
 
   let queryResult;
 
@@ -37,7 +53,7 @@ router.get("", (req, res) => {
   query
     .then(result => {
       queryResult = result;
-      return Note.count();
+      return Note.count( criteria );
     })
     .then(count => {
       res.status(200).json({
@@ -69,6 +85,7 @@ router.put("/:id",
     _id: req.params.id,
     title: req.body.title,
     content: req.body.content,
+    personal: req.body.personal || false,
     creator: req.authInfo.userId
   });
 

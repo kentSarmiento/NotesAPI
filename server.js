@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 
 const notesRoutes = require('./routes/notes');
 const userRoutes = require('./routes/users');
+const userNoteRoutes = require('./routes/user-notes');
 
 const app = express();
 
@@ -43,5 +44,6 @@ app.use((req, res, next) => {
 
 app.use("/notes", notesRoutes);
 app.use("/users", userRoutes);
+app.use("/users", userNoteRoutes);
 
 app.listen(3000);
