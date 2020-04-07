@@ -10,8 +10,13 @@ module.exports = (req, res, next) =>  {
     };
     next();
   } catch (error) {
-    res.status(401).json({
-      message: "Authentication failed! Incorrect token"
-    });
+    if (req.method === "GET") {
+      // Allow GET method to proceed, purpose is only to get user from token
+      next();
+    } else {
+      res.status(401).json({
+        message: "Authentication failed! Incorrect token"
+      });
+    }
   }
 }
