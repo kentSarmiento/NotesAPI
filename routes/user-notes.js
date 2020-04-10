@@ -21,7 +21,7 @@ router.get("/:userId/notes",
       .limit(limit);
   }
 
-  query
+  query.sort({rank: 1})
     .then(result => {
       notebook = result;
       return Note.count( criteria );

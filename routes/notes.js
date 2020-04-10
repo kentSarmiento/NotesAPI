@@ -9,16 +9,30 @@ router.post("",
   (req, res) => {
   console.log("Received post request...");
 
-  const note = new Note({
-    title: req.body.title,
-    content: req.body.content,
-    personal: req.body.personal || false,
-    creator: req.authInfo.userId
-  });
+  Note.find({}).sort({rank: -1}).limit(1)
+    .then(note => {
+      if (note.length) {
+        return note[0].rank + 1;
+      } else {
+        return 1;
+      }
+    })
+    .then(rank => {
+      const note = new Note({
+        title: req.body.title,
+        content: req.body.content,
+        personal: (req.body.personal !== undefined) ? req.body.personal : true,
+        category: undefined,
+        created: req.body.created,
+        updated: req.body.created,
+        rank: rank,
+        creator: req.authInfo.userId
+      });
 
-  note.save().then(result => {
-    res.status(201).send(result);
-  });
+      note.save().then(result => {
+        res.status(201).send(result);
+      });
+    });
 });
 
 router.get("",
@@ -50,7 +64,7 @@ router.get("",
       .limit(limit);
   }
 
-  query
+  query.sort({rank: 1})
     .then(result => {
       queryResult = result;
       return Note.count( criteria );
@@ -85,7 +99,9 @@ router.put("/:id",
     _id: req.params.id,
     title: req.body.title,
     content: req.body.content,
-    personal: req.body.personal || false,
+    personal: (req.body.personal !== undefined) ? req.body.personal : true,
+    updated: new Date(req.body.updated),
+    rank: req.body.rank,
     creator: req.authInfo.userId
   });
 
