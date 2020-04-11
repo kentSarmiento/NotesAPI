@@ -99,7 +99,7 @@ router.put("/:id",
     _id: req.params.id,
     title: req.body.title,
     content: req.body.content,
-    personal: (req.body.personal !== undefined) ? req.body.personal : true,
+    personal: (req.body.personal !== undefined) ? req.body.personal : undefined,
     updated: new Date(req.body.updated),
     rank: req.body.rank,
     creator: req.authInfo.userId
