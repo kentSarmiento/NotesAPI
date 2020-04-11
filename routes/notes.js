@@ -32,6 +32,11 @@ router.post("",
       note.save().then(result => {
         res.status(201).send(result);
       });
+    })
+    .catch(error => {
+      res.status(500).json({
+        message: "Creating note failed!"
+      });
     });
 });
 
@@ -74,6 +79,11 @@ router.get("",
         notes: queryResult,
         total: count
       });
+    })
+    .catch(error => {
+      res.status(500).json({
+        message: "Retrieving notes failed!"
+      });
     });
 });
 
@@ -87,6 +97,11 @@ router.get("/:id", (req, res) => {
       } else {
         res.status(404).json({message: 'Note not found!'});
       }
+    })
+    .catch(error => {
+      res.status(500).json({
+        message: "Retrieving note failed!"
+      });
     });
 });
 
@@ -107,11 +122,16 @@ router.put("/:id",
 
   Note.updateOne({_id: req.params.id, creator: req.authInfo.userId}, note)
     .then(result => {
-      if (result.nModified > 0) {
+      if (result.n > 0) {
         res.status(200).json({ message: "Update successfully!"});
       } else {
         res.status(401).json({ message: "Not authorized!"});
       }
+    })
+    .catch(error => {
+      res.status(500).json({
+        message: "Updating note failed!"
+      });
     });
 });
 
@@ -127,6 +147,11 @@ router.delete("/:id",
       } else {
         res.status(401).json({ message: "Not authorized!"});
       }
+    })
+    .catch(error => {
+      res.status(500).json({
+        message: "Deleting note failed!"
+      });
     });
 });
 

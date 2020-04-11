@@ -23,7 +23,7 @@ router.post("/signup", (req, res, next) => {
       })
       .catch(error => {
         res.status(500).json({
-          error: error
+           message: "Account creation failed!"
         });
       });
   });
@@ -32,9 +32,10 @@ router.post("/signup", (req, res, next) => {
 router.post("/login", (req, res, next) => {
   console.log("Received new login request...");
 
+  let foundUser;
   User.findOne({ username: req.body.username })
     .then(user => {
-      if (!user) { // TODO: returning here will "attempt" to send 200 OK after promise
+      if (!user) {
         return res.status(401).json({
           message: "Authentication failed! Username not found"
         });
@@ -43,6 +44,7 @@ router.post("/login", (req, res, next) => {
       return bcrypt.compare(req.body.password, user.password);
     })
     .then(result => {
+      if (!foundUser) return;
       if (!result) {
         return res.status(401).json({
           message: "Authentication failed! Incorrect password"
