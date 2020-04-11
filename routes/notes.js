@@ -123,7 +123,11 @@ router.put("/:id",
   Note.updateOne({_id: req.params.id, creator: req.authInfo.userId}, note)
     .then(result => {
       if (result.n > 0) {
-        res.status(200).json({ message: "Update successfully!"});
+        if (result.nModified == 0) {
+          res.status(500).json({message: "Updating note failed!"});
+        } else {
+          res.status(200).json({ message: "Update successfully!"});
+        }
       } else {
         res.status(401).json({ message: "Not authorized!"});
       }
