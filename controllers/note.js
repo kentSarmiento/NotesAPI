@@ -42,12 +42,11 @@ exports.getNotes = (req, res) => {
 
   // Provide public notes in general
   let criteria = { personal: { $ne: true } };
-  if (req.authInfo && req.authInfo.userId) {
-      // If authorized, include private notes of user
+  if (req.query.userId) {
       criteria = { $or: [
                   { $and: [
                     { personal: true },
-                    { creator: req.authInfo.userId }
+                    { creator: req.query.userId }
                     ] },
                   { personal: { $ne: true } }
                   ] };
@@ -81,10 +80,12 @@ exports.getNotes = (req, res) => {
 
 exports.getNote = (req, res) => {
   console.log("Received get request...");
-
   Note.findOne({_id: req.params.id})
     .then(note => {
       if (note) {
+        if (req.query.userId !== note.creator) {
+          res.status(401).json({ message: "Not authorized!"});
+        }
         res.status(200).send(note);
       } else {
         res.status(404).json({message: 'Note not found!'});
