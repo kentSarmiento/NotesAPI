@@ -83,10 +83,11 @@ exports.getNote = (req, res) => {
   Note.findOne({_id: req.params.id})
     .then(note => {
       if (note) {
-        if (req.query.userId !== note.creator) {
+        if (req.query.userId != note.creator) {
           res.status(401).json({ message: "Not authorized!"});
+        } else {
+          res.status(200).send(note);
         }
-        res.status(200).send(note);
       } else {
         res.status(404).json({message: 'Note not found!'});
       }
