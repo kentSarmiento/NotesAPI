@@ -60,7 +60,7 @@ exports.getNotes = (req, res) => {
       .limit(limit);
   }
 
-  query.sort({rank: 1})
+  query.sort({personal: -1, rank: 1}) // Temporary: make page for public notes
     .then(result => {
       queryResult = result;
       return Note.count( criteria );
