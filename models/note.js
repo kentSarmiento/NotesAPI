@@ -5,7 +5,7 @@ const noteSchema = mongoose.Schema({
   title: { type: String, required: true },
   content: { type: String, required: true },
   personal: { type: Boolean },
-  category: { type: [String] },
+  category: { type: [String], default: undefined },
   created: { type: Date, required: true },
   updated: { type: Date, required: true },
   rank: { type: Number, required: true, unique: true},

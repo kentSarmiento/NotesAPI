@@ -106,12 +106,16 @@ exports.updateNote = (req, res) => {
     _id: req.params.id,
     title: req.body.title,
     content: req.body.content,
-    personal: (req.body.personal !== undefined) ? req.body.personal : undefined,
+    personal: req.body.personal,
     updated: new Date(req.body.updated),
     rank: req.body.rank,
-    creator: req.authInfo.userId,
-    category: req.body.category
+    creator: req.authInfo.userId
   });
+
+  if (req.body.category) {
+    note.category = req.body.category;
+    console.log(note);
+  }
 
   Note.updateOne({_id: req.params.id, creator: req.authInfo.userId}, note)
     .then(result => {
