@@ -109,7 +109,8 @@ exports.updateNote = (req, res) => {
     personal: (req.body.personal !== undefined) ? req.body.personal : undefined,
     updated: new Date(req.body.updated),
     rank: req.body.rank,
-    creator: req.authInfo.userId
+    creator: req.authInfo.userId,
+    category: req.body.category
   });
 
   Note.updateOne({_id: req.params.id, creator: req.authInfo.userId}, note)
