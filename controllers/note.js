@@ -51,8 +51,7 @@ exports.getNotes = (req, res) => {
                   { personal: { $ne: true } }
                   ] };
   }
-  const query = Note.find( criteria );
-
+  const query = Note.find( criteria ).select('-content');
   let queryResult;
 
   if (limit && page) {
