@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
 const notesRoutes = require('./routes/notes');
+const tasksRoutes = require('./routes/tasks');
 const userRoutes = require('./routes/users');
 
 const app = express();
@@ -42,6 +43,7 @@ app.use((req, res, next) => {
 });
 
 app.use("/notes", notesRoutes);
+app.use("/tasks", tasksRoutes);
 app.use("/users", userRoutes);
 
 app.listen(process.env.PORT || 8080);
