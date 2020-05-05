@@ -2,7 +2,13 @@ const jwt = require('jsonwebtoken');
 
 module.exports = (req, res, next) =>  {
   try {
-    if (!req.headers.authorization) next(); // Allow unauthorized view of data
+    if (!req.headers.authorization) {
+      req.authInfo = {
+        username: null,
+        userId: null
+      };
+      next(); // Allow unauthorized view of data
+    }
     else {
       const token = req.headers.authorization.split(" ")[1];
       const decodedToken = jwt.verify(token, process.env.JWT_KEY);
