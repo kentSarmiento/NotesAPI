@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
 const notesRoutes = require('./routes/notes');
+const tasklistsRoutes = require('./routes/tasklists');
 const tasksRoutes = require('./routes/tasks');
 const userRoutes = require('./routes/users');
 
@@ -43,6 +44,7 @@ app.use((req, res, next) => {
 });
 
 app.use("/notes", notesRoutes);
+app.use("/lists", tasklistsRoutes);
 app.use("/tasks", tasksRoutes);
 app.use("/users", userRoutes);
 
