@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const notesRoutes = require('./routes/notes');
 const tasklistsRoutes = require('./routes/tasklists');
 const tasksRoutes = require('./routes/tasks');
+const expensesRoutes = require('./routes/expenses');
 const userRoutes = require('./routes/users');
 
 const app = express();
@@ -46,6 +47,7 @@ app.use((req, res, next) => {
 app.use("/notes", notesRoutes);
 app.use("/lists", tasklistsRoutes);
 app.use("/tasks", tasksRoutes);
+app.use("/expenses", expensesRoutes);
 app.use("/users", userRoutes);
 
 app.listen(process.env.PORT || 8080);
