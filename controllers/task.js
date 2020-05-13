@@ -129,6 +129,45 @@ exports.deleteTask = (req, res) => {
     });
 }
 
+function batchCreateTask(task, userId) {
+  const taskId = task._id;
+
+  Task.find({}).sort({rank: -1}).limit(1)
+    .then(tasks => {
+      if (tasks.length) {
+        return tasks[0].rank + 1;
+      } else {
+        return 1;
+      }
+    })
+    .then(taskRank => {
+      const taskInfo = new Task({
+        creator: userId,
+        list: task.list,
+        id: task.id,
+        title: task.title,
+        finished: false,
+        rank: taskRank,
+        updated: Date(),
+        version: 1,
+        locked: false,
+        personal: true
+      });
+      taskInfo.save().then(result => {});
+    });
+}
+
+exports.batchCreate = (req, res) => {
+  console.log("Received batchCreate request for tasks...");
+
+  const count = +req.body.total;
+  for (idx = 0; idx < count; idx++) {
+    batchCreateTask(req.body.tasks[idx], req.authInfo.userId);
+  }
+
+  res.status(200).json({ message: "Ongoing update!"});
+}
+
 function batchUpdateTask(task) {
   const taskId = task._id;
 
