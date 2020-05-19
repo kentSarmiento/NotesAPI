@@ -19,6 +19,7 @@ router.get("/:id/tasks", GetAuthMiddleware, listsController.getTasks);
 router.post("/getTasks", GetAuthMiddleware, listsController.getTasks)
 router.post("/updateTasks", AuthMiddleware, listsController.updateTasks)
 router.post("/:id/deleteTasks", AuthMiddleware, listsController.deleteTasks)
+router.post("/:id/deleteOngoingTasks", AuthMiddleware, listsController.deleteOngoingTasks)
 router.post("/:id/deleteFinishedTasks", AuthMiddleware, listsController.deleteFinishedTasks)
 
 module.exports = router;
