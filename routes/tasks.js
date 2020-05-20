@@ -12,6 +12,7 @@ router.get("/:id", GetAuthMiddleware, tasksController.getTask);
 router.put("/:id", AuthMiddleware, tasksController.updateTask);
 router.delete("/:id", AuthMiddleware, tasksController.deleteTask);
 
+router.post("/batchCreate", AuthMiddleware, tasksController.batchCreate)
 router.post("/sort", AuthMiddleware, tasksController.sortTasks)
 router.post("/batchUpdate", AuthMiddleware, tasksController.batchUpdate)
 
