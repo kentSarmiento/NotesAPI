@@ -21,7 +21,8 @@ mongoose.connect(process.env.MONGO_DB_SERVER)
     console.log("Connection to database failed!");
   });
 
-app.use(bodyParser.json());
+app.use(express.json({limit: '50mb'}));
+app.use(express.urlencoded({limit: '50mb'}));
 
 app.use((req, res, next) => {
   const headers = [
