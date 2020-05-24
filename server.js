@@ -3,6 +3,8 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
 const notesRoutes = require('./routes/notes');
+const notesv2Routes = require('./routes/v2/notes');
+const notebookRoutes = require('./routes/v2/notebook');
 const tasklistsRoutes = require('./routes/tasklists');
 const tasksRoutes = require('./routes/tasks');
 const expensesRoutes = require('./routes/expenses');
@@ -19,7 +21,8 @@ mongoose.connect(process.env.MONGO_DB_SERVER)
     console.log("Connection to database failed!");
   });
 
-app.use(bodyParser.json());
+app.use(express.json({limit: '50mb'}));
+app.use(express.urlencoded({limit: '50mb'}));
 
 app.use((req, res, next) => {
   const headers = [
@@ -45,6 +48,8 @@ app.use((req, res, next) => {
 });
 
 app.use("/notes", notesRoutes);
+app.use("/v2/notes", notesv2Routes);
+app.use("/v2/notebook", notebookRoutes);
 app.use("/lists", tasklistsRoutes);
 app.use("/tasks", tasksRoutes);
 app.use("/expenses", expensesRoutes);
